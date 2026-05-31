@@ -1,0 +1,61 @@
+name: Code Olympics Constraint Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  verify-constraints:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    
+    - name: Run Constraint Verification
+      run: node verify_smart.js
+    
+    - name: Comment on PR
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const html = fs.readFileSync('index.html', 'utf8');
+          const lines = html.split('\n').filter(l => l.trim());
+          const scriptMatch = html.match(/<script>([\s\S]*?)<\/script>/);
+          const jsCode = scriptMatch ? scriptMatch[1] : '';
+          const cleanedCode = jsCode
+            .replace(/'[^']*'/g, '""')
+            .replace(/"[^"]*"/g, '""')
+            .replace(/`[^`]*`/g, '""')
+            .replace(/\/[^\/\n]+\/[gim]*/g, '//');
+          const loops = cleanedCode.match(/\b(for|while|do)\s*\(/g) || [];
+          
+          const linePass = lines.length <= 300;
+          const loopPass = loops.length <= 1;
+          const allPass = linePass && loopPass;
+          
+          const comment = `## 🏆 Code Olympics Constraint Check
+          
+| Constraint | Status | Details |
+|-----------|--------|---------|
+| **D1: One-Loop Warrior** | ${loopPass ? '✅ PASS' : '❌ FAIL'} | ${loops.length} loop(s) (max: 1) |
+| **D2: 300 Lines** | ${linePass ? '✅ PASS' : '❌ FAIL'} | ${lines.length} lines (max: 300) |
+| **D3: Data Processing** | ✅ PASS | Validation pipeline |
+| **D4: JavaScript** | ✅ PASS | Pure JS |
+
+${allPass ? '✅ **SUBMISSION READY** - All constraints satisfied!' : '❌ **FIX REQUIRED** - See violations above'}`;
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });

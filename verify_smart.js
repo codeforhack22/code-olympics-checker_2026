@@ -1,4 +1,3 @@
-git branch -M main
 const fs = require('fs');
 
 const html = fs.readFileSync('index.html', 'utf8');
@@ -18,7 +17,7 @@ const cleanedCode = jsCode
 // Now count actual loops
 const loops = cleanedCode.match(/\b(for|while|do)\s*\(/g) || [];
 
-console.log('=== Code Olympics Constraint Verification ===\n');
+console.log('=== Code Olympics 2026 Constraint Verification ===\n');
 console.log('File: index.html');
 console.log('Total lines:', lines.length);
 console.log('Line budget: 300');
@@ -41,6 +40,8 @@ console.log('D4: JavaScript');
 console.log('\n=== Summary ===');
 if (lines.length <= 300 && loops.length <= 1) {
   console.log('✅ SUBMISSION READY - All constraints satisfied!');
+  process.exit(0);
 } else {
   console.log('❌ FIX REQUIRED - Constraints violated');
+  process.exit(1);
 }
