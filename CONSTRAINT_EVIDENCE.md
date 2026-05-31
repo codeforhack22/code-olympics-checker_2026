@@ -393,7 +393,7 @@ node verify_smart.js
 
 **Live Demo:**
 ```
-https://code-olympics-checker.vercel.app/
+https://code-olympics-checker-2026-oao5.vercel.app/
 ```
 
 **GitHub Repository:**

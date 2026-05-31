@@ -71,7 +71,7 @@
 ## Live Demo
 
 ```
-https://code-olympics-checker.vercel.app/
+https://code-olympics-checker-2026-oao5.vercel.app/
 ```
 
 **Try it:**

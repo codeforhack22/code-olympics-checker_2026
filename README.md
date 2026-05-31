@@ -1,6 +1,6 @@
 # 🏆 Code Olympics 2026 Constraint Checker
 
-**Live Demo:** https://code-olympics-checker.vercel.app/
+**Live Demo:** https://code-olympics-checker-2026-oao5.vercel.app/
 
 A browser-based validator that checks all 4D constraints of Code Olympics submissions in real-time. Zero dependencies, runs anywhere.
 

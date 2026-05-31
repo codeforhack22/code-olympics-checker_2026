@@ -83,7 +83,7 @@ Your Code Olympics 2026 Constraint Checker is now **production-ready** and **com
 
 ### Live Demo
 ```
-https://code-olympics-checker.vercel.app/
+https://code-olympics-checker-2026-oao5.vercel.app/
 ```
 
 ### GitHub Repo
@@ -171,7 +171,7 @@ node verify_smart.js
 
 ### 2. Test Live Demo
 ```
-https://code-olympics-checker.vercel.app/
+https://code-olympics-checker-2026-oao5.vercel.app/
 ```
 - Paste example code
 - Click "Check Constraints"
@@ -191,7 +191,7 @@ git push origin test-pr
 **Submission Form:**
 - **Project Name:** Code Olympics 2026 Constraint Checker
 - **GitHub Repo:** https://github.com/codeforhack22/code-olympics-checker_2026
-- **Live Demo:** https://code-olympics-checker.vercel.app/
+- **Live Demo:** https://code-olympics-checker-2026-oao5.vercel.app/
 - **4D Combo:**
   - D1: One-Loop Warrior
   - D2: Detailed Creator (300 lines)
