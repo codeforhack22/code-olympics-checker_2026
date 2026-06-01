@@ -1,1 +1,453 @@
-<!DOCTYPE html><html><head>    <meta charset="UTF-8">    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>Code Olympics 2026 Constraint Checker</title>    <style>        * {            margin: 0;            padding: 0;            box-sizing: border-box        }        body {            font-family: 'Segoe UI', system-ui, sans-serif;            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);            min-height: 100vh;            padding: 20px        }        .container {            max-width: 1200px;            margin: 0 auto;            background: white;            border-radius: 12px;            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);            overflow: hidden        }        header {            background: #2d3748;            color: white;            padding: 30px;            text-align: center        }        h1 {            font-size: 2.5em;            margin-bottom: 10px;            font-weight: 700        }        .tagline {            opacity: 0.9;            font-size: 1.1em        }        main {            padding: 30px        }        .grid {            display: grid;            grid-template-columns: 1fr 1fr;            gap: 30px;            margin-bottom: 30px        }        @media(max-width:768px) {            .grid {                grid-template-columns: 1fr            }        }        .section {            background: #f7fafc;            padding: 20px;            border-radius: 8px;            border: 2px solid #e2e8f0        }        .section h2 {            color: #2d3748;            margin-bottom: 15px;            font-size: 1.3em        }        textarea {            width: 100%;            height: 300px;            padding: 15px;            border: 2px solid #cbd5e0;            border-radius: 6px;            font-family: 'Courier New', monospace;            font-size: 14px;            resize: vertical        }        textarea:focus {            outline: 0;            border-color: #667eea;            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1)        }        .controls {            display: grid;            grid-template-columns: repeat(2, 1fr);            gap: 15px;            margin-bottom: 20px        }        label {            display: block;            color: #4a5568;            font-weight: 600;            margin-bottom: 5px;            font-size: 0.9em        }        select {            width: 100%;            padding: 10px;            border: 2px solid #cbd5e0;            border-radius: 6px;            font-size: 14px;            background: white        }        select:focus {            outline: 0;            border-color: #667eea;            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1)        }        .btn-group {            display: grid;            grid-template-columns: 2fr 1fr;            gap: 10px        }        button {            width: 100%;            padding: 15px;            background: #667eea;            color: white;            border: 0;            border-radius: 6px;            font-size: 1.1em;            font-weight: 600;            cursor: pointer;            transition: all 0.3s        }        button:hover {            background: #5a67d8;            transform: translateY(-2px);            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4)        }        button:active {            transform: translateY(0)        }        button.secondary {            background: #48bb78        }        button.secondary:hover {            background: #38a169        }        .results {            background: #f7fafc;            border-radius: 8px;            padding: 20px;            border: 2px solid #e2e8f0        }        .result-item {            background: white;            padding: 15px;            margin-bottom: 10px;            border-radius: 6px;            border-left: 4px solid #cbd5e0        }        .result-item.pass {            border-left-color: #48bb78;            background: #f0fff4        }        .result-item.fail {            border-left-color: #f56565;            background: #fff5f5        }        .result-item.unverified {            border-left-color: #f6ad55;            background: #fffaf0        }        .result-header {            display: flex;            justify-content: space-between;            align-items: center;            margin-bottom: 8px        }        .result-title {            font-weight: 600;            color: #2d3748        }        .badge {            padding: 4px 12px;            border-radius: 20px;            font-size: 0.85em;            font-weight: 600        }        .badge.pass {            background: #48bb78;            color: white        }        .badge.fail {            background: #f56565;            color: white        }        .badge.unverified {            background: #f6ad55;            color: white        }        .violations {            margin-top: 10px;            padding: 10px;            background: #fef5e7;            border-radius: 4px;            font-size: 0.9em;            color: #744210        }        .summary {            background: #2d3748;            color: white;            padding: 20px;            border-radius: 8px;            text-align: center;            margin-bottom: 20px;            font-size: 1.2em;            font-weight: 600        }        .summary.ready {            background: #48bb78        }        .summary.fix {            background: #f56565        }        .summary.partial {            background: #f6ad55        }        .hidden {            display: none        }        .meta {            text-align: center;            padding: 20px;            color: #718096;            font-size: 0.9em;            border-top: 2px solid #e2e8f0        }        .link {            color: #667eea;            text-decoration: none;            font-weight: 600        }        .link:hover {            text-decoration: underline        }    </style></head><body>    <div class="container">        <header>            <h1>🏆 Code Olympics 2026</h1>            <div class="tagline">Constraint Checker — Paste Code</div>        </header>        <main>            <div class="grid">                <div class="section">                    <h2>📝 Your Code</h2><textarea id="codeInput" placeholder="Paste your code here..."></textarea>                </div>                <div class="section">                    <h2>🎯 Your 4D Combo</h2>                    <div class="controls">                        <div><label>D1</label><select id="d1">                                <option value="no-import">No-Import Rookie</option>                                <option value="few-var">Few-Variable Hero</option>                                <option value="single-func">Single-Function Master</option>                                <option value="error-proof">Error-Proof Coder</option>                                <option value="one-loop" selected>One-Loop Warrior</option>                                <option value="short-name">Short-Name Ninja</option>                                <option value="fast-response">Fast-Response Builder</option>                                <option value="simple-state">Simple-State Creator</option>                            </select></div>                        <div><label>D2</label><select id="d2">                                <option value="50">50</option>                                <option value="100">100</option>                                <option value="150">150</option>                                <option value="200">200</option>                                <option value="300" selected>300</option>                                <option value="400">400</option>                                <option value="500">500</option>                            </select></div>                        <div><label>D3</label><select id="d3">                                <option value="games">Games</option>                                <option value="tools">Tools</option>                                <option value="text">Text</option>                                <option value="numbers">Numbers</option>                                <option value="files">Files</option>                                <option value="quiz">Quiz</option>                                <option value="visual">Visual</option>                                <option value="db">Database</option>                                <option value="data" selected>Data</option>                                <option value="system">System</option>                            </select></div>                        <div><label>D4</label><select id="d4">                                <option value="python">Python</option>                                <option value="javascript" selected>JavaScript</option>                                <option value="typescript">TypeScript</option>                                <option value="go">Go</option>                                <option value="rust">Rust</option>                                <option value="ruby">Ruby</option>                                <option value="c">C</option>                                <option value="cpp">C++</option>                                <option value="csharp">C#</option>                                <option value="java">Java</option>                                <option value="kotlin">Kotlin</option>                                <option value="swift">Swift</option>                                <option value="objc">Objective-C</option>                                <option value="bash">Bash</option>                                <option value="php">PHP</option>                                <option value="perl">Perl</option>                                <option value="lua">Lua</option>                                <option value="scala">Scala</option>                                <option value="haskell">Haskell</option>                                <option value="elixir">Elixir</option>                            </select></div>                    </div>                    <div class="btn-group"><button onclick="checkConstraints()">🔍 Check</button><button                            class="secondary" onclick="validateSelf()">🎯 Self</button></div>                </div>            </div>            <div id="resultsSection" class="hidden">                <div id="summaryBox"></div>                <div class="results" id="resultsBox"></div>            </div>            <div class="meta">✨ All 4D constraints validated • Automated • Real-time | <a class="link"                    href="github-scanner.html">🔗 Scan GitHub Repos</a></div>        </main>    </div>    <script>const p = { javascript: { loop: /\b(for|while|do)\b/g, func: /\bfunction\b|\=\>|^[a-z_$][\w$]*\s*\(/gm, import: /\b(import|require)\b/g, var: /\b(let|const|var)\s+([a-z_$][\w$]*)/gi }, python: { loop: /\b(for|while)\b/g, func: /\bdef\s+\w+/g, import: /\b(import|from)\b/g, var: /\b([a-z_]\w*)\s*=/gi }, go: { loop: /\bfor\b/g, func: /\bfunc\s+\w+/g, import: /\bimport\b/g, var: /\b(var|:=)\s+([a-z_]\w*)/gi }, rust: { loop: /\b(for|while|loop)\b/g, func: /\bfn\s+\w+/g, import: /\buse\b/g, var: /\blet\s+(mut\s+)?([a-z_]\w*)/gi } }; function validateSelf() { fetch(window.location.href).then(r => r.text()).then(html => { document.getElementById('codeInput').value = html; checkConstraints() }) } function checkConstraints() { const code = document.getElementById('codeInput').value; if (!code.trim()) { alert('Paste code first!'); return } const d1 = document.getElementById('d1').value, d2 = parseInt(document.getElementById('d2').value), lines = code.split('\n').filter(l => l.trim()), pat = p['javascript'], results = runChecks(code, lines, d1, d2, pat); renderResults(results) } function runChecks(code, lines, d1, d2, pat) { return [{ name: 'D2 · Line Budget', check: () => { const c = lines.length, p = c <= d2; return { pass: p, msg: p ? `✓ ${c}/${d2}` : `✗ ${c} exceeds ${d2}`, violations: p ? [] : [`Excess: ${c - d2}`] } } }, { name: 'D1 · Core', check: () => { if (d1 === 'one-loop') { const m = code.match(pat.loop) || [], p = m.length <= 1; return { pass: p, msg: p ? `✓ ${m.length} loop(s)` : `✗ ${m.length} loops`, violations: p ? [] : [`Found ${m.length}`] } } if (d1 === 'no-import') { const m = code.match(pat.import) || [], p = m.length === 0; return { pass: p, msg: p ? '✓ No imports' : `✗ ${m.length} imports`, violations: p ? [] : [`Found ${m.length}`] } } if (d1 === 'short-name') { const v = [...code.matchAll(pat.var)].map(m => m[m.length - 1]).filter(x => x && x.length > 3), p = v.length === 0; return { pass: p, msg: p ? '✓ All ≤3' : `✗ ${v.length} long`, violations: p ? [] : [`Found ${v.length}`] } } if (d1 === 'few-var') { const v = new Set([...code.matchAll(pat.var)].map(m => m[m.length - 1])), p = v.size <= 8; return { pass: p, msg: p ? `✓ ${v.size}/8` : `✗ ${v.size} vars`, violations: p ? [] : [`Found ${v.size}`] } } if (d1 === 'single-func') { const f = code.match(pat.func) || [], p = f.length <= 1; return { pass: p, msg: p ? `✓ ${f.length} func` : `✗ ${f.length} funcs`, violations: p ? [] : [`Found ${f.length}`] } } return { pass: true, msg: '✓ OK', violations: [] } } }, { name: 'D3 · Domain', check: () => { return { pass: true, msg: 'ℹ️ Domain', violations: [] } } }, { name: 'D4 · Language', check: () => { return { pass: true, msg: '✅ Language', violations: [] } } }].map(r => ({ ...r, ...r.check() })) } function renderResults(results) { const ap = results.every(r => r.pass === true), af = results.some(r => r.pass === false), s = document.getElementById('summaryBox'), rb = document.getElementById('resultsBox'); s.className = ap ? 'summary ready' : af ? 'summary fix' : 'summary partial'; s.innerHTML = ap ? '✅ READY' : af ? '❌ FIX' : '⚠ MOSTLY READY'; rb.innerHTML = results.map(r => { const c = r.pass === true ? 'pass' : r.pass === false ? 'fail' : 'unverified'; const b = r.pass === true ? '✓' : r.pass === false ? '✗' : '⚠'; return `<div class="result-item ${c}"><div class="result-header"><span class="result-title">${r.name}</span><span class="badge ${c}">${b}</span></div><div>${r.msg}</div>${r.violations.length > 0 ? `<div class="violations">${r.violations.join('<br>')}</div>` : ''}</div>` }).join(''); document.getElementById('resultsSection').classList.remove('hidden'); document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' }) }</script></body></html>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Code Olympics 2026 Constraint Checker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden
+        }
+
+        header {
+            background: #2d3748;
+            color: white;
+            padding: 30px;
+            text-align: center
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700
+        }
+
+        .tagline {
+            opacity: 0.9;
+            font-size: 1.1em
+        }
+
+        main {
+            padding: 30px
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: #e2e8f0;
+            border: none;
+            border-radius: 6px 6px 0 0;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s
+        }
+
+        .tab.active {
+            background: #667eea;
+            color: white
+        }
+
+        .tab-content {
+            display: none
+        }
+
+        .tab-content.active {
+            display: block
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px
+        }
+
+        @media(max-width:768px) {
+            .grid {
+                grid-template-columns: 1fr
+            }
+        }
+
+        .section {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0
+        }
+
+        .section h2 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 1.3em
+        }
+
+        textarea {
+            width: 100%;
+            height: 300px;
+            padding: 15px;
+            border: 2px solid #cbd5e0;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            resize: vertical
+        }
+
+        textarea:focus,
+        input:focus,
+        select:focus {
+            outline: 0;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1)
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #cbd5e0;
+            border-radius: 6px;
+            font-size: 14px
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px
+        }
+
+        label {
+            display: block;
+            color: #4a5568;
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 0.9em
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #cbd5e0;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #667eea;
+            color: white;
+            border: 0;
+            border-radius: 6px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s
+        }
+
+        button:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4)
+        }
+
+        button:active {
+            transform: translateY(0)
+        }
+
+        button:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none
+        }
+
+        .results {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 20px;
+            border: 2px solid #e2e8f0
+        }
+
+        .result-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border-left: 4px solid #cbd5e0
+        }
+
+        .result-item.pass {
+            border-left-color: #48bb78;
+            background: #f0fff4
+        }
+
+        .result-item.fail {
+            border-left-color: #f56565;
+            background: #fff5f5
+        }
+
+        .result-item.unverified {
+            border-left-color: #f6ad55;
+            background: #fffaf0
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px
+        }
+
+        .result-title {
+            font-weight: 600;
+            color: #2d3748
+        }
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600
+        }
+
+        .badge.pass {
+            background: #48bb78;
+            color: white
+        }
+
+        .badge.fail {
+            background: #f56565;
+            color: white
+        }
+
+        .badge.unverified {
+            background: #f6ad55;
+            color: white
+        }
+
+        .violations {
+            margin-top: 10px;
+            padding: 10px;
+            background: #fef5e7;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #744210
+        }
+
+        .summary {
+            background: #2d3748;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            font-weight: 600
+        }
+
+        .summary.ready {
+            background: #48bb78
+        }
+
+        .summary.fix {
+            background: #f56565
+        }
+
+        .summary.partial {
+            background: #f6ad55
+        }
+
+        .hidden {
+            display: none
+        }
+
+        .progress {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin: 10px 0
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #667eea;
+            width: 0%;
+            transition: width 0.3s
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>🏆 Code Olympics 2026</h1>
+            <div class="tagline">Constraint Checker — Paste Code or Scan GitHub Repo</div>
+        </header>
+        <main>
+            <div class="tabs"><button class="tab active" onclick="switchTab('paste')">📝 Paste Code</button><button
+                    class="tab" onclick="switchTab('github')">🔗 GitHub Repo</button></div>
+            <div id="pasteTab" class="tab-content active">
+                <div class="grid">
+                    <div class="section">
+                        <h2>📝 Your Code</h2><textarea id="codeInput" placeholder="Paste your code here..."></textarea>
+                    </div>
+                    <div class="section">
+                        <h2>🎯 Your 4D Combo</h2>
+                        <div class="controls">
+                            <div><label>D1</label><select id="d1">
+                                    <option value="no-import">No-Import Rookie</option>
+                                    <option value="few-var">Few-Variable Hero</option>
+                                    <option value="single-func">Single-Function Master</option>
+                                    <option value="error-proof">Error-Proof Coder</option>
+                                    <option value="one-loop" selected>One-Loop Warrior</option>
+                                    <option value="short-name">Short-Name Ninja</option>
+                                    <option value="fast-response">Fast-Response Builder</option>
+                                    <option value="simple-state">Simple-State Creator</option>
+                                </select></div>
+                            <div><label>D2</label><select id="d2">
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="150">150</option>
+                                    <option value="200">200</option>
+                                    <option value="300" selected>300</option>
+                                </select></div>
+                            <div><label>D3</label><select id="d3">
+                                    <option value="games">Games</option>
+                                    <option value="tools">Tools</option>
+                                    <option value="text">Text</option>
+                                    <option value="numbers">Numbers</option>
+                                    <option value="files">Files</option>
+                                    <option value="quiz">Quiz</option>
+                                    <option value="visual">Visual</option>
+                                    <option value="db">Database</option>
+                                    <option value="data" selected>Data</option>
+                                    <option value="system">System</option>
+                                </select></div>
+                            <div><label>D4</label><select id="d4">
+                                    <option value="python">Python</option>
+                                    <option value="javascript" selected>JavaScript</option>
+                                    <option value="typescript">TypeScript</option>
+                                    <option value="go">Go</option>
+                                    <option value="rust">Rust</option>
+                                    <option value="ruby">Ruby</option>
+                                    <option value="c">C</option>
+                                    <option value="cpp">C++</option>
+                                    <option value="csharp">C#</option>
+                                    <option value="java">Java</option>
+                                    <option value="kotlin">Kotlin</option>
+                                    <option value="swift">Swift</option>
+                                    <option value="objc">Objective-C</option>
+                                    <option value="bash">Bash</option>
+                                    <option value="php">PHP</option>
+                                    <option value="perl">Perl</option>
+                                    <option value="lua">Lua</option>
+                                    <option value="scala">Scala</option>
+                                    <option value="haskell">Haskell</option>
+                                    <option value="elixir">Elixir</option>
+                                </select></div>
+                        </div><button onclick="checkConstraints()">🔍 Check Constraints</button>
+                    </div>
+                </div>
+            </div>
+            <div id="githubTab" class="tab-content">
+                <div class="grid">
+                    <div class="section">
+                        <h2>🔗 GitHub Repository</h2><input type="text" id="repoUrl"
+                            placeholder="github.com/owner/repo or https://github.com/owner/repo">
+                        <p style="margin-top:10px;font-size:0.9em;color:#718096">Scans all source files (.js, .py, .go,
+                            .rs, .java, etc)</p>
+                    </div>
+                    <div class="section">
+                        <h2>🎯 Your 4D Combo</h2>
+                        <div class="controls">
+                            <div><label>D1</label><select id="gd1">
+                                    <option value="no-import">No-Import Rookie</option>
+                                    <option value="few-var">Few-Variable Hero</option>
+                                    <option value="single-func">Single-Function Master</option>
+                                    <option value="error-proof">Error-Proof Coder</option>
+                                    <option value="one-loop" selected>One-Loop Warrior</option>
+                                    <option value="short-name">Short-Name Ninja</option>
+                                    <option value="fast-response">Fast-Response Builder</option>
+                                    <option value="simple-state">Simple-State Creator</option>
+                                </select></div>
+                            <div><label>D2</label><select id="gd2">
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="150">150</option>
+                                    <option value="200">200</option>
+                                    <option value="300" selected>300</option>
+                                </select></div>
+                            <div><label>D3</label><select id="gd3">
+                                    <option value="games">Games</option>
+                                    <option value="tools">Tools</option>
+                                    <option value="text">Text</option>
+                                    <option value="numbers">Numbers</option>
+                                    <option value="files">Files</option>
+                                    <option value="quiz">Quiz</option>
+                                    <option value="visual">Visual</option>
+                                    <option value="db">Database</option>
+                                    <option value="data" selected>Data</option>
+                                    <option value="system">System</option>
+                                </select></div>
+                            <div><label>D4</label><select id="gd4">
+                                    <option value="python">Python</option>
+                                    <option value="javascript" selected>JavaScript</option>
+                                    <option value="typescript">TypeScript</option>
+                                    <option value="go">Go</option>
+                                    <option value="rust">Rust</option>
+                                    <option value="ruby">Ruby</option>
+                                    <option value="c">C</option>
+                                    <option value="cpp">C++</option>
+                                    <option value="csharp">C#</option>
+                                    <option value="java">Java</option>
+                                    <option value="kotlin">Kotlin</option>
+                                    <option value="swift">Swift</option>
+                                    <option value="objc">Objective-C</option>
+                                    <option value="bash">Bash</option>
+                                    <option value="php">PHP</option>
+                                    <option value="perl">Perl</option>
+                                    <option value="lua">Lua</option>
+                                    <option value="scala">Scala</option>
+                                    <option value="haskell">Haskell</option>
+                                    <option value="elixir">Elixir</option>
+                                </select></div>
+                        </div><button id="scanBtn" onclick="scanGitHub()">🔍 Scan Repository</button>
+                    </div>
+                </div>
+                <div id="progressBox"></div>
+            </div>
+            <div id="resultsSection" class="hidden">
+                <div id="summaryBox"></div>
+                <div class="results" id="resultsBox"></div>
+            </div>
+        </main>
+    </div>
+    <script>const p = { javascript: { loop: /\b(for|while|do)\b/g, func: /\bfunction\b|\=\>|^[a-z_$][\w$]*\s*\(/gm, import: /\b(import|require)\b/g, var: /\b(let|const|var)\s+([a-z_$][\w$]*)/gi }, python: { loop: /\b(for|while)\b/g, func: /\bdef\s+\w+/g, import: /\b(import|from)\b/g, var: /\b([a-z_]\w*)\s*=/gi }, go: { loop: /\bfor\b/g, func: /\bfunc\s+\w+/g, import: /\bimport\b/g, var: /\b(var|:=)\s+([a-z_]\w*)/gi }, rust: { loop: /\b(for|while|loop)\b/g, func: /\bfn\s+\w+/g, import: /\buse\b/g, var: /\blet\s+(mut\s+)?([a-z_]\w*)/gi } }; function switchTab(t) { document.querySelectorAll('.tab').forEach(b => b.classList.remove('active')); document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active')); event.target.classList.add('active'); document.getElementById(t + 'Tab').classList.add('active') } function checkConstraints() { const code = document.getElementById('codeInput').value; if (!code.trim()) { alert('Paste code first!'); return } const d1 = document.getElementById('d1').value, d2 = parseInt(document.getElementById('d2').value), lines = code.split('\n').filter(l => l.trim()), pat = p['javascript'], results = runChecks(code, lines, d1, d2, pat); renderResults(results) } async function scanGitHub() { const url = document.getElementById('repoUrl').value; if (!url.trim()) { alert('Enter repo URL!'); return } const m = url.match(/github\.com\/([^\/]+)\/([^\/]+)/); if (!m) { alert('Invalid GitHub URL!'); return } const [, o, r] = m; const d1 = document.getElementById('gd1').value, d2 = parseInt(document.getElementById('gd2').value); document.getElementById('scanBtn').disabled = true; document.getElementById('resultsSection').classList.remove('hidden'); document.getElementById('progressBox').innerHTML = '<div class="progress"><div class="progress-bar" style="width:10%"></div></div>Fetching repository...'; try { const t = await fetch(`https://api.github.com/repos/${o}/${r}/git/trees/main?recursive=1`); const tr = await t.json(); const sf = tr.tree.filter(f => f.type === 'blob' && /\.(js|ts|py|go|rs|rb|c|java|sh|php)$/.test(f.path)); let ac = ''; for (let i = 0; i < sf.length; i++) { const f = sf[i]; document.getElementById('progressBox').innerHTML = `<div class="progress"><div class="progress-bar" style="width:${Math.round((i + 1) / sf.length * 100)}%"></div></div>Scanning ${i + 1}/${sf.length} files...`; const c = await fetch(`https://api.github.com/repos/${o}/${r}/contents/${f.path}`); const ct = await c.json(); ac += atob(ct.content) + '\n' } const l = ac.split('\n').filter(x => x.trim()); const res = runChecks(ac, l, d1, d2); renderResults(res) } catch (e) { alert('Error: ' + e.message); document.getElementById('progressBox').innerHTML = '<div style="color:red">❌ Failed to fetch repository</div>' } document.getElementById('scanBtn').disabled = false } function runChecks(code, lines, d1, d2) { const pat = p['javascript']; return [{ name: 'D2 · Line Budget', check: () => { const c = lines.length, p = c <= d2; return { pass: p, msg: p ? `✓ ${c}/${d2}` : `✗ ${c} exceeds ${d2}`, violations: p ? [] : [`Excess: ${c - d2}`] } } }, { name: 'D1 · Core', check: () => { if (d1 === 'one-loop') { const m = code.match(pat.loop) || [], p = m.length <= 1; return { pass: p, msg: p ? `✓ ${m.length} loop(s)` : `✗ ${m.length} loops`, violations: p ? [] : [`Found ${m.length}`] } } if (d1 === 'no-import') { const m = code.match(pat.import) || [], p = m.length === 0; return { pass: p, msg: p ? '✓ No imports' : `✗ ${m.length} imports`, violations: p ? [] : [`Found ${m.length}`] } } if (d1 === 'short-name') { const v = [...code.matchAll(pat.var)].map(m => m[m.length - 1]).filter(x => x && x.length > 3), p = v.length === 0; return { pass: p, msg: p ? '✓ All ≤3' : `✗ ${v.length} long`, violations: p ? [] : [`Found ${v.length}`] } } if (d1 === 'few-var') { const v = new Set([...code.matchAll(pat.var)].map(m => m[m.length - 1])), p = v.size <= 8; return { pass: p, msg: p ? `✓ ${v.size}/8` : `✗ ${v.size} vars`, violations: p ? [] : [`Found ${v.size}`] } } if (d1 === 'single-func') { const f = code.match(pat.func) || [], p = f.length <= 1; return { pass: p, msg: p ? `✓ ${f.length} func` : `✗ ${f.length} funcs`, violations: p ? [] : [`Found ${f.length}`] } } return { pass: true, msg: '✓ OK', violations: [] } } }, { name: 'D3 · Domain', check: () => { return { pass: true, msg: 'ℹ️ Domain', violations: [] } } }, { name: 'D4 · Language', check: () => { return { pass: true, msg: '✅ Language', violations: [] } } }].map(r => ({ ...r, ...r.check() })) } function renderResults(results) { const ap = results.every(r => r.pass === true), af = results.some(r => r.pass === false), s = document.getElementById('summaryBox'), rb = document.getElementById('resultsBox'); s.className = ap ? 'summary ready' : af ? 'summary fix' : 'summary partial'; s.innerHTML = ap ? '✅ READY' : af ? '❌ FIX' : '⚠ MOSTLY READY'; rb.innerHTML = results.map(r => { const c = r.pass === true ? 'pass' : r.pass === false ? 'fail' : 'unverified'; const b = r.pass === true ? '✓' : r.pass === false ? '✗' : '⚠'; return `<div class="result-item ${c}"><div class="result-header"><span class="result-title">${r.name}</span><span class="badge ${c}">${b}</span></div><div>${r.msg}</div>${r.violations.length > 0 ? `<div class="violations">${r.violations.join('<br>')}</div>` : ''}</div>` }).join(''); document.getElementById('resultsSection').classList.remove('hidden'); document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' }) }</script>
+</body>
+
+</html>
